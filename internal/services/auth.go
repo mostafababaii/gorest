@@ -3,17 +3,12 @@ package services
 import (
 	"errors"
 	"fmt"
+	"github.com/mostafababaii/gorest/internal/models"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/mostafababaii/gorest/app/models"
 	"github.com/mostafababaii/gorest/config"
 )
-
-type Tokenizer interface {
-	Generate(user *models.User) (string, error)
-	Validate(token string) (*models.User, error)
-}
 
 type JwtToken struct {
 	Secret   []byte

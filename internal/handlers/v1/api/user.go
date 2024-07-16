@@ -1,14 +1,14 @@
 package api
 
 import (
-	e "github.com/mostafababaii/gorest/app/helpers/errors"
-	"github.com/mostafababaii/gorest/app/helpers/response"
+	"github.com/mostafababaii/gorest/internal/models"
+	e "github.com/mostafababaii/gorest/pkg/errors"
+	"github.com/mostafababaii/gorest/pkg/response"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mostafababaii/gorest/app/models"
 )
 
 type UserHandler struct {

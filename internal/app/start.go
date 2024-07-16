@@ -3,6 +3,9 @@ package app
 import (
 	"context"
 	"fmt"
+	"github.com/mostafababaii/gorest/internal/database/mysql"
+	"github.com/mostafababaii/gorest/internal/models"
+	"github.com/mostafababaii/gorest/internal/routers"
 	"log"
 	"net/http"
 	"os"
@@ -11,14 +14,14 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mostafababaii/gorest/app/models"
-	"github.com/mostafababaii/gorest/app/routers"
 	"github.com/mostafababaii/gorest/config"
 )
 
 func init() {
 	config.Setup()
-	models.Setup()
+	mysql.Setup()
+
+	models.Migrate(mysql.NewConnection())
 }
 
 func Start() {

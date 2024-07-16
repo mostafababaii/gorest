@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"github.com/mostafababaii/gorest/internal/database/mysql"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -47,7 +48,7 @@ func (b *LoginBody) MapTo(p any) {
 
 func (u *User) FindByID(id uint) (*User, error) {
 	var user User
-	if err := db.First(&user, "id = ?", id).Error; err != nil {
+	if err := mysql.Connection.First(&user, "id = ?", id).Error; err != nil {
 		return nil, errors.New("user not found")
 	}
 
@@ -61,14 +62,14 @@ func (u *User) Create(user User) (*User, error) {
 	}
 
 	user.Password = string(hashedPassword)
-	err = db.Create(&user).Error
+	err = mysql.Connection.Create(&user).Error
 
 	return &user, err
 }
 
 func (u *User) Authenticate(user User) (*User, bool) {
 	var foundUser User
-	if err := db.First(&foundUser, "email = ?", user.Email).Error; err != nil {
+	if err := mysql.Connection.First(&foundUser, "email = ?", user.Email).Error; err != nil {
 		return nil, false
 	}
 
