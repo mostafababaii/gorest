@@ -1,20 +1,21 @@
 package api
 
 import (
-	e "github.com/mostafababaii/gorest/app/helpers/errors"
-	"github.com/mostafababaii/gorest/app/helpers/response"
+	"github.com/mostafababaii/gorest/internal/interfaces"
+	"github.com/mostafababaii/gorest/internal/models"
+	"github.com/mostafababaii/gorest/internal/services"
+	e "github.com/mostafababaii/gorest/pkg/errors"
+	"github.com/mostafababaii/gorest/pkg/response"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mostafababaii/gorest/app/models"
-	"github.com/mostafababaii/gorest/app/services"
 )
 
 type AuthHandler struct {
 	User         models.User
-	TokenService services.Tokenizer
+	TokenService interfaces.Tokenizer
 	logger       *log.Logger
 }
 

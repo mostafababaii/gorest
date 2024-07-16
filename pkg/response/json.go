@@ -2,7 +2,7 @@ package response
 
 import (
 	"github.com/gin-gonic/gin"
-	e "github.com/mostafababaii/gorest/app/helpers/errors"
+	e "github.com/mostafababaii/gorest/pkg/errors"
 )
 
 type Response struct {

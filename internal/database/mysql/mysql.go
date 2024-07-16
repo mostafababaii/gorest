@@ -1,4 +1,4 @@
-package models
+package mysql
 
 import (
 	"fmt"
@@ -9,10 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var Connection *gorm.DB
 
-type Mapper interface {
-	MapTo(p any)
+func NewConnection() *gorm.DB {
+	return Connection
 }
 
 // Setup initializes the database instance
@@ -25,23 +25,17 @@ func Setup() {
 	)
 
 	var err error
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	Connection, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("models.Setup err: %v", err)
 	}
 
-	defer Migrate()
-
-	sqlDB, err := db.DB()
+	sqlDB, err := Connection.DB()
 	if err != nil {
 		log.Fatalf("issue on getting db instance err: %v", err)
 	}
 
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
-}
-
-func Migrate() {
-	db.AutoMigrate(&User{})
 }

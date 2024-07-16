@@ -1,15 +1,15 @@
 package middlewares
 
 import (
-	e "github.com/mostafababaii/gorest/app/helpers/errors"
-	"github.com/mostafababaii/gorest/app/helpers/response"
+	"github.com/mostafababaii/gorest/internal/interfaces"
+	e "github.com/mostafababaii/gorest/pkg/errors"
+	"github.com/mostafababaii/gorest/pkg/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mostafababaii/gorest/app/services"
 )
 
-func AuthMiddleware(tokenService services.Tokenizer) gin.HandlerFunc {
+func AuthMiddleware(tokenService interfaces.Tokenizer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		r := response.NewResponse(c)
 
