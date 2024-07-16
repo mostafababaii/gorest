@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "github.com/mostafababaii/gorest/app/handlers/api/v1"
+	"github.com/mostafababaii/gorest/app/handlers/v1/api"
 	"github.com/mostafababaii/gorest/app/middlewares"
 )
 
@@ -17,14 +17,14 @@ func InitRouter() *gin.Engine {
 	apiv1 := router.Group("/api/v1")
 	authRouters := apiv1.Group("/auth")
 
-	authHandler := v1.NewAuthHandler()
+	authHandler := api.NewAuthHandler()
 	authRouters.POST("/register", authHandler.Register)
 	authRouters.POST("/login", authHandler.Login)
 
 	authMiddleware := middlewares.AuthMiddleware(authHandler.TokenService)
 
 	userRouters := apiv1.Group("/users")
-	userHandler := v1.NewUserHandler()
+	userHandler := api.NewUserHandler()
 	userRouters.Use(authMiddleware).GET("/", userHandler.Profile)
 
 	return router

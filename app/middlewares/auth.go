@@ -1,11 +1,11 @@
 package middlewares
 
 import (
+	e "github.com/mostafababaii/gorest/app/helpers/errors"
+	"github.com/mostafababaii/gorest/app/helpers/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	e "github.com/mostafababaii/gorest/app/handlers/api/v1/errors"
-	"github.com/mostafababaii/gorest/app/handlers/api/v1/response"
 	"github.com/mostafababaii/gorest/app/services"
 )
 

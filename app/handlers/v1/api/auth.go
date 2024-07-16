@@ -1,13 +1,13 @@
-package v1
+package api
 
 import (
+	e "github.com/mostafababaii/gorest/app/helpers/errors"
+	"github.com/mostafababaii/gorest/app/helpers/response"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	e "github.com/mostafababaii/gorest/app/handlers/api/v1/errors"
-	"github.com/mostafababaii/gorest/app/handlers/api/v1/response"
 	"github.com/mostafababaii/gorest/app/models"
 	"github.com/mostafababaii/gorest/app/services"
 )
