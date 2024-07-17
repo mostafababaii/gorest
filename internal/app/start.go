@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/mostafababaii/gorest/internal/database/mysql"
+	"github.com/mostafababaii/gorest/internal/database/redis"
 	"github.com/mostafababaii/gorest/internal/models"
 	"github.com/mostafababaii/gorest/internal/routers"
 	"log"
@@ -20,6 +21,7 @@ import (
 func init() {
 	config.Setup()
 	mysql.Setup()
+	redis.Setup()
 
 	models.Migrate(mysql.NewConnection())
 }

@@ -1,40 +1,41 @@
 package api
 
 import (
+	"errors"
+	"github.com/gin-gonic/gin"
 	"github.com/mostafababaii/gorest/internal/models"
+	"github.com/mostafababaii/gorest/internal/services"
 	e "github.com/mostafababaii/gorest/pkg/errors"
 	"github.com/mostafababaii/gorest/pkg/response"
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
-	User   models.User
 	logger *log.Logger
 }
 
 func NewUserHandler() *UserHandler {
 	return &UserHandler{
-		User:   models.NewUser(),
 		logger: log.New(os.Stdout, "", log.LstdFlags),
 	}
 }
 
-func (u *UserHandler) Profile(c *gin.Context) {
+func (uh *UserHandler) Profile(c *gin.Context) {
 	r := response.NewResponse(c)
 
-	requestUser, ok := c.Get("user")
+	user, ok := c.Get("user")
 	if !ok {
 		r.JsonResponse(http.StatusInternalServerError, e.ERROR, nil)
+		uh.logger.Println(errors.New("error on fetching user from request"))
 		return
 	}
 
-	user, err := u.User.FindByID(requestUser.(*models.User).ID)
+	user, err := services.UserService.FindByID(user.(*models.User).ID)
 	if err != nil {
 		r.JsonResponse(http.StatusNotFound, e.USER_NOT_FOUND, nil)
+		uh.logger.Println(err)
 		return
 	}
 

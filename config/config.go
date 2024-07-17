@@ -10,8 +10,9 @@ import (
 )
 
 var (
-	DatabaseConfig   *database
-	ServerConfig     *server
+	ServerConfig     server
+	DatabaseConfig   database
+	RedisConfig      redis
 	JwtSecret        []byte
 	JwtTokenLifeSpan time.Duration
 )
@@ -20,6 +21,13 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
+}
+
+type server struct {
+	RunMode      string
+	HttpPort     int
+	ReadTimeout  time.Duration
+	WriteTimeout time.Duration
 }
 
 type database struct {
@@ -31,11 +39,14 @@ type database struct {
 	TablePrefix string
 }
 
-type server struct {
-	RunMode      string
-	HttpPort     int
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
+type redis struct {
+	Host        string
+	Port        int
+	User        string
+	Password    string
+	MaxIdle     int
+	MaxActive   int
+	IdleTimeout time.Duration
 }
 
 func Setup() {
@@ -68,19 +79,49 @@ func Setup() {
 		serverPort = 8080
 	}
 
-	ServerConfig = &server{
+	redisPort, err := strconv.Atoi(os.Getenv("REDIS_PORT"))
+	if err != nil {
+		redisPort = 6379
+	}
+
+	redisMaxIdle, err := strconv.Atoi(os.Getenv("REDIS_MAX_IDLE"))
+	if err != nil {
+		redisMaxIdle = 10
+	}
+
+	redisMaxActive, err := strconv.Atoi(os.Getenv("REDIS_MAX_ACTIVE"))
+	if err != nil {
+		redisMaxActive = 100
+	}
+
+	IdleTimeoutInSecond, err := strconv.Atoi(os.Getenv("REDIS_IDLE_TIMEOUT_IN_SECOND"))
+	if err != nil {
+		IdleTimeoutInSecond = 300
+	}
+
+	ServerConfig = server{
 		RunMode:      os.Getenv("RUN_MODE"),
 		HttpPort:     serverPort,
 		ReadTimeout:  time.Duration(readTimeout) * time.Second,
 		WriteTimeout: time.Duration(WriteTimeout) * time.Second,
 	}
 
-	DatabaseConfig = &database{
+	DatabaseConfig = database{
 		Driver:      os.Getenv("DB_DRIVER"),
 		User:        os.Getenv("DB_USER"),
 		Password:    os.Getenv("DB_PASSWORD"),
 		Host:        os.Getenv("DB_HOST"),
 		Name:        os.Getenv("DB_NAME"),
 		TablePrefix: os.Getenv("DB_TABLE_PREFIX"),
+	}
+
+	RedisConfig = redis{
+		Host:        os.Getenv("REDIS_HOST"),
+		Port:        redisPort,
+		User:        os.Getenv("REDIS_USER"),
+		Password:    os.Getenv("REDIS_PASSWORD"),
+		MaxIdle:     redisMaxIdle,
+		MaxActive:   redisMaxActive,
+		IdleTimeout: time.Duration(IdleTimeoutInSecond) * time.Second,
 	}
 }

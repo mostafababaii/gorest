@@ -8,16 +8,14 @@ import (
 	"gorm.io/gorm"
 )
 
+var UserModel = User{}
+
 type User struct {
 	gorm.Model
-	FistName string `gorm:"type:varchar(30)" json:"fist_name"`
-	LastName string `gorm:"type:varchar(30)" json:"last_name"`
-	Email    string `gorm:"type:varchar(100);unique;not_null" json:"email"`
-	Password string `gorm:"type:varchar(255);not_null" json:"-"`
-}
-
-func NewUser() User {
-	return User{}
+	FistName string `gorm:"type:varchar(30)" json:"fist_name" redis:"fist_name"`
+	LastName string `gorm:"type:varchar(30)" json:"last_name" redis:"last_name"`
+	Email    string `gorm:"type:varchar(100);unique;not_null" json:"email" redis:"email"`
+	Password string `gorm:"type:varchar(255);not_null" json:"-" redis:"password"`
 }
 
 type RegisterBody struct {
