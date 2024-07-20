@@ -37,6 +37,8 @@ type database struct {
 	Host        string
 	Name        string
 	TablePrefix string
+	MaxIdle     int
+	MaxOpen     int
 }
 
 type redis struct {
@@ -79,6 +81,16 @@ func Setup() {
 		serverPort = 8080
 	}
 
+	dbMaxIdle, err := strconv.Atoi(os.Getenv("DB_MAX_IDLE"))
+	if err != nil {
+		dbMaxIdle = 10
+	}
+
+	dbMaxOpen, err := strconv.Atoi(os.Getenv("DB_MAX_OPEN"))
+	if err != nil {
+		dbMaxOpen = 100
+	}
+
 	redisPort, err := strconv.Atoi(os.Getenv("REDIS_PORT"))
 	if err != nil {
 		redisPort = 6379
@@ -113,6 +125,8 @@ func Setup() {
 		Host:        os.Getenv("DB_HOST"),
 		Name:        os.Getenv("DB_NAME"),
 		TablePrefix: os.Getenv("DB_TABLE_PREFIX"),
+		MaxIdle:     dbMaxIdle,
+		MaxOpen:     dbMaxOpen,
 	}
 
 	RedisConfig = redis{

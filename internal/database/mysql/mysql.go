@@ -36,6 +36,6 @@ func Setup() {
 		log.Fatalf("issue on getting db instance err: %v", err)
 	}
 
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(100)
+	sqlDB.SetMaxIdleConns(config.DatabaseConfig.MaxIdle)
+	sqlDB.SetMaxOpenConns(config.DatabaseConfig.MaxOpen)
 }
