@@ -25,14 +25,15 @@ func NewUserHandler() *UserHandler {
 func (uh *UserHandler) Profile(c *gin.Context) {
 	r := response.NewResponse(c)
 
-	user, ok := c.Get("user")
+	ctxUser, ok := c.Get("user")
 	if !ok {
 		r.JsonResponse(http.StatusInternalServerError, e.ERROR, nil)
 		uh.logger.Println(errors.New("error on fetching user from request"))
 		return
 	}
 
-	user, err := services.UserService.FindByID(user.(*models.User).ID)
+	userFromContext := ctxUser.(*models.User)
+	user, err := services.UserService.FindByID(userFromContext.ID)
 	if err != nil {
 		r.JsonResponse(http.StatusNotFound, e.USER_NOT_FOUND, nil)
 		uh.logger.Println(err)
